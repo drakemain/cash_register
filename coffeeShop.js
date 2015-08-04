@@ -1,20 +1,63 @@
 module.exports = {
-	coffee : {
-		name:"coffee",
+	coffee: {
+		name: "Coffee",
 
-		small:1.25,
-		med:1.75,
-		large:2.00,
+		pricedBySize: true,
+		
+		sizes: {
+			small: 1.50,
+			med: 2.00,
+			large: 2.25,
+		},
 
-		taxable:true
+		taxable: true
 	},
-	latte : {
-		name:"latte",
 
-		small:2.25,
-		med:2.80,
-		large:3.25,
+	latte: {
+		name: "Latte",
 
-		taxable:true
+		pricedBySize: true,
+
+		sizes: {
+			small: 1.50,
+			med: 2.00,
+			large: 2.25,
+		},
+
+		taxable: true
+	},
+
+	cappuccino: {
+		name: "Cappuccino",
+
+		pricedBySize: true,
+
+		sizes: {
+			small: 1.50,
+			med: 2.00,
+			large: 2.25,
+		},
+
+		taxable: true
+	},
+
+	bagel: {
+		name: "Bagel",
+
+		pricedBySize: false,
+
+		amt: 3.25,
+
+		taxable: true,
+	},
+
+	muffin: {
+		name: "Muffin", 
+
+		pricedBySize: false,
+
+		amt: 3.00,
+
+		taxable: true
 	}
 };
