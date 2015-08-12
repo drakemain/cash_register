@@ -1,9 +1,7 @@
-module.exports = {
+module.exports.items = {
 	coffee: {
 		name: "Coffee",
 
-		pricedBySize: true,
-		
 		sizes: {
 			small: 1.50,
 			med: 2.00,
@@ -16,12 +14,10 @@ module.exports = {
 	latte: {
 		name: "Latte",
 
-		pricedBySize: true,
-
 		sizes: {
-			small: 1.50,
-			med: 2.00,
-			large: 2.25,
+			small: 2.25,
+			med: 2.75,
+			large: 3.10,
 		},
 
 		taxable: true
@@ -30,12 +26,10 @@ module.exports = {
 	cappuccino: {
 		name: "Cappuccino",
 
-		pricedBySize: true,
-
 		sizes: {
-			small: 1.50,
-			med: 2.00,
-			large: 2.25,
+			small: 2.50,
+			med: 2.85,
+			large: 3.25,
 		},
 
 		taxable: true
@@ -43,8 +37,6 @@ module.exports = {
 
 	bagel: {
 		name: "Bagel",
-
-		pricedBySize: false,
 
 		amt: 3.25,
 
@@ -54,10 +46,16 @@ module.exports = {
 	muffin: {
 		name: "Muffin", 
 
-		pricedBySize: false,
-
 		amt: 3.00,
 
 		taxable: true
 	}
+};
+
+module.exports.index = {
+	1: "coffee",
+	2: "latte",
+	3: "cappuccino",
+	4: "bagel",
+	5: "muffin"
 };
