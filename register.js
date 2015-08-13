@@ -2,16 +2,12 @@ var readlineSync = require("readline-sync");
 var merch = require("./coffeeShop");
 
 var main = function() {
-  var task;
+  var scanningItems = true;
 
-  while (true) {
-    clearConsole();
-    register.printTotals();
-    console.log('');
-    printItemMenu();
-    console.log('');
-
-    task = taskPrompt();
+  clearConsole();
+  
+  while (scanningItems) {
+  scanningItems = scanPrompt();
   }
 };
 
@@ -92,6 +88,9 @@ var scanPrompt = function() {
 
   if (selectedItem != escapeChar) {
     register.scanItem(merch.items[selectedItem], selectedSize, selectedQuantity);
+    return true;
+  } else {
+    return false;
   }
 };
 
@@ -102,7 +101,7 @@ var itemHandler = function(escapeChar) {
   clearConsole();
   printItemMenu();
 
-  selection = getUserSelection("\nSelect an item: ");
+  selection = getUserSelection("\nSelect an item: (x to cancel)");
 
   selection = parseInput(1, getObjectSize(merch.index), escapeChar, selection);
 
@@ -131,7 +130,7 @@ var sizeHandler = function(item, escapeChar) {
   console.log("Selected: " + merch.items[item].name + '\n');        
   printSizes(sizes);
 
-  selection = getUserSelection("\nSelect size: ");
+  selection = getUserSelection("\nSelect size: (x to cancel)");
 
   selection = parseInput(1, getObjectSize(sizes), escapeChar, selection);
 
@@ -149,7 +148,7 @@ var sizeHandler = function(item, escapeChar) {
 };
 
 var quantityHandler = function(selectedSize, escapeChar) {
-  selection = getUserSelection("\nQuantity: ")
+  selection = getUserSelection("\nQuantity: (x to cancel)")
 
   selection = parseInput(0, 99, escapeChar, selection);
 
@@ -263,9 +262,7 @@ var clearConsole = function() {
   console.log('\033c');
 };
 
-// main();
+main();
 
-clearConsole();
-scanPrompt();
 
 register.printTotals();
