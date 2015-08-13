@@ -4,6 +4,7 @@
   "version": "0.1.1",
   "description": "A cash register application",
   "dependencies": {
+    "express": "^4.13.3",
     "readline-sync": "1.2.19"
   }
 }

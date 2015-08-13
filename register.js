@@ -105,7 +105,7 @@ var itemHandler = function(escapeChar) {
 
   selection = parseInput(1, getObjectSize(merch.index), escapeChar, selection);
 
-  if (selection) {
+  if (selection !== false) {
     if (selection === escapeChar) {
       return {item: selection, sub: "break"};
     } else {
@@ -134,7 +134,7 @@ var sizeHandler = function(item, escapeChar) {
 
   selection = parseInput(1, getObjectSize(sizes), escapeChar, selection);
 
-  if (selection) {
+  if (selection !== false) {
     if (selection == escapeChar) {
       subMenu = "item";
       return {size: selection, sub: subMenu};
@@ -152,7 +152,7 @@ var quantityHandler = function(selectedSize, escapeChar) {
 
   selection = parseInput(0, 99, escapeChar, selection);
 
-  if (selection) {
+  if (selection !== false) {
     if (selection === escapeChar) {
       if (selectedSize === '') {
         subMenu = "item";
@@ -191,7 +191,7 @@ var register = {
     if (item.sizes) {
       itemValue = item.sizes[size];
     } else {
-      itemValue = item["amt"];
+      itemValue = item.amt;
     }
 
     totalScannedValue = itemValue * quantity;
