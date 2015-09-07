@@ -26,9 +26,11 @@ app.get('/', function (req, res) {
 app.post('/form-handler', function(req, res) {
   var selection = JSON.parse(req.body.item);
 
-  console.log(selection);
+  if (selection.size === "na") {
+    selection.size = '';
+  }
 
-  console.log(merch.items[selection.item]);
+  console.log(selection)
 
   reg.register.scanItem(merch.items[selection.item], selection.size, 1);
 
@@ -49,8 +51,8 @@ var formatMenu = function() {
         output += size + ": $" + merch.items[item].sizes[size].toFixed(2) + "<br>";
       }
     } else {
-      output += "<br><input type='radio' name='item' value='{\"item\": " 
-        + item + ", \"size\": na}'>" + merch.items[item].name + ": $"
+      output += "<br><input type='radio' name='item' value='{\"item\": \"" 
+        + item + "\", \"size\": \"na\"}'>" + merch.items[item].name + ": $"
         + merch.items[item].amt.toFixed(2) + "<br>";
     }
   }
