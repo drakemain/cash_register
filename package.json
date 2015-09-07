@@ -1,7 +1,7 @@
 {
   "name": "cash_register",
   "main": "main.js",
-  "version": "0.1.2",
+  "version": "0.2.1",
   "description": "A cash register application",
   "dependencies": {
     "body-parser": "^1.13.3",
