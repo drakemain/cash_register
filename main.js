@@ -14,7 +14,9 @@ app.get('/', function (req, res) {
   output += "<p>"
   output += formatMenu();
   output += "<input type='submit' value='Submit'>"
-  output += "</form></p></body></html>";
+  output += "<input type='submit' value='Reset' formaction='/reset'>"
+  output += "</form></p><p><a href='https://github.com/drakemain/cash_register/tree/node-app'>" + 
+    "Source</a></body></html>";
 
   res.send(output);
 });
@@ -31,7 +33,15 @@ app.post('/form-handler', function(req, res) {
   reg.register.scanItem(merch.items[selection.item], selection.size, 1);
 
   res.redirect('/');
-})
+});
+
+app.post('/reset', function(req, res) {
+  reg.register.subTotal = 0;
+  reg.register.tax = 0;
+  reg.register.total = 0;
+
+  res.redirect('/');
+});
 
 var formatMenu = function() {
   var i = 1;
@@ -40,6 +50,7 @@ var formatMenu = function() {
   for(var item in merch.items) {
     if (merch.items[item].sizes) {
       output += "<br>" + merch.items[item].name + ":<br>";
+
       for (size in merch.items[item].sizes) {
         output += "<input type='radio' name='item' value='{\"item\": \""
           + item + "\", \"size\": \"" + size + "\"}'>";

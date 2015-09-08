@@ -49,6 +49,20 @@ module.exports.items = {
 		amt: 3.00,
 
 		taxable: true
+	},
+
+	nonTaxItem: {
+		name: "A non-taxable item",
+
+		sizes: {
+			xsmall: .25,
+			small: .50,
+			med: 1.00,
+			large: 1.40,
+			xlarge: 2.00
+		},
+
+		taxable: false
 	}
 };
 
