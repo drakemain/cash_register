@@ -1,38 +1,45 @@
 module.exports = {
   register : {
+    /*
     subTotal: 0.0,
     total: 0.0,
     tax: 0.0,
+    scannedItems: 0,*/
     taxRate: .095,
-    scannedItems: 0,
 
     scanItem: function(item, size, quantity) {
+      var scannedItem = {};
+
       if (item.sizes) {
         itemValue = item.sizes[size];
       } else {
         itemValue = item.amt;
       }
 
-      totalScannedValue = itemValue * quantity;
+      scannedItem.subTotal = itemValue * quantity;
 
-      this.addToTotal(totalScannedValue);
+      //this.addToTotal(totalScannedValue);
 
       if (item.taxable) {
-        this.addToTax(totalScannedValue);
+        scannedItem.tax = this.calcTax(scannedItem.subTotal);
+      } else {
+        scannedItem.tax = 0;
       }
 
-      this.calcTotal();
+      scannedItem.total = scannedItem.subTotal + scannedItem.tax;
+
+      return scannedItem;
     },
 
-    addToTotal: function(amount) {
+    /*addToTotal: function(amount) {
       this.subTotal += amount;
+    },*/
+
+    calcTax: function(amtToTax) {
+      return amtToTax * this.taxRate;
     },
 
-    addToTax: function(amtToTax) {
-      this.tax += amtToTax * this.taxRate;
-    },
-
-    getTransaction: function() {
+    /*getTransaction: function() {
       console.log(this.transaction);
     },
 
@@ -47,9 +54,9 @@ module.exports = {
 
       return formattedTotals;
     },
-
+   
     calcTotal: function() {
       this.total = this.subTotal + this.tax;
-    }
+    }*/
   }
 };
