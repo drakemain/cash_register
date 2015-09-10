@@ -1,11 +1,13 @@
 {
   "name": "cash_register",
-  "main": "main.js",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "A cash register application",
   "dependencies": {
     "body-parser": "^1.13.3",
     "express": "4.13.3",
     "readline-sync": "1.2.19"
+  },
+  "scripts": {
+    "start": "node main.js"
   }
 }
