@@ -74,6 +74,9 @@ app.post('/login', function(req, res) {
       "tax": 0,
       "total": 0
     };
+
+    writeDB();
+
     console.log("New user " + userID + " created.");
   } else {
     console.log("Returning user " + userID + " logged in.");
@@ -100,6 +103,8 @@ app.post('/form-handler/:user', function(req, res) {
   database[req.params.user].subTotal += scannedItem.subTotal;
   database[req.params.user].tax += scannedItem.tax;
   database[req.params.user].total += scannedItem.total;
+
+  writeDB();
 
   res.redirect('/register/' + req.params.user);
 });
@@ -156,7 +161,7 @@ var fetchDB = function() {
       fs.readFile('data/userDB.json', function(err, data) {
         database = JSON.parse(data);
 
-        console.log("Database fetched.");
+        console.log("Database fetched.\n");
 
         console.log(database);
       });
@@ -171,12 +176,20 @@ var fetchDB = function() {
 
           database = JSON.parse(data);
 
-          console.log("Database fetched.");
+          console.log("Database fetched.\n");
 
           console.log(database);
         });
       });
     }
+  });
+}
+
+var writeDB = function() {
+  var stringDatabase = JSON.stringify(database);
+
+  fs.writeFile('data/userDB.json', stringDatabase, function(err) {
+    console.log("Database updated\n");
   });
 }
 
