@@ -1,8 +1,10 @@
+var fs = require('fs');
 var express = require('express');
 var bodyParser = require('body-parser');
 var reg = require('./assets/js/register.js');
 var merch = require('./assets/js/coffeeShop.js')
-var database = {};
+
+var database;
 
 app = express();
 
@@ -57,11 +59,11 @@ app.get('/showUserData/:user', function(req, res) {
   }
 });
 
-app.get('/showDB', function(req, res) {
+app.get('showDB', function(req, res) {
   res.send(database);
 });
 
-app.post('/login', function(req, res) {
+app.post('login', function(req, res) {
   var userID = req.body.userID;
   //var redirect = "/showUserData/" + userID;
 
@@ -77,11 +79,11 @@ app.post('/login', function(req, res) {
     console.log("Returning user " + userID + " logged in.");
   }
 
-  res.redirect('/register/' + userID);
+  res.redirect('register/' + userID);
   //res.send("Data submitted<br><a href='/'>Back</a>");
 });
 
-app.post('/form-handler/:user', function(req, res) {
+app.post('form-handler/:user', function(req, res) {
   
   var selection = JSON.parse(req.body.item);
 
@@ -99,15 +101,15 @@ app.post('/form-handler/:user', function(req, res) {
   database[req.params.user].tax += scannedItem.tax;
   database[req.params.user].total += scannedItem.total;
 
-  res.redirect('/register/' + req.params.user);
+  res.redirect('register/' + req.params.user);
 });
 
-app.post('/reset/:user', function(req, res) {
+app.post('reset/:user', function(req, res) {
   database[req.params.user].subTotal = 0;
   database[req.params.user].tax = 0;
   database[req.params.user].total = 0;
 
-  res.redirect('/register/' + req.params.user);
+  res.redirect('register/' + req.params.user);
 });
 
 var formatMenu = function(userID) {
@@ -143,5 +145,41 @@ var formatTotals = function(userID) {
 
   return formattedTotals;
 }
+
+var fetchDB = function() {
+  console.log("Initializing database.");
+
+  fs.exists('data/userDB.json', function(exists) {
+    if (exists) {
+      console.log("Existing database found. Fetching..");
+
+      fs.readFile('data/userDB.json', function(err, data) {
+        database = JSON.parse(data);
+
+        console.log("Database fetched.");
+
+        console.log(database);
+      });
+    } else {
+      console.log("Database doesn't exist! Creating..");
+
+      fs.writeFile('data/userDB.json', '{}', function(err) {
+        console.log("Database file created. Fetching..");
+
+        fs.readFile('data/userDB.json', function(err, data) {
+          console.log(data);
+
+          database = JSON.parse(data);
+
+          console.log("Database fetched.");
+
+          console.log(database);
+        });
+      });
+    }
+  });
+}
+
+fetchDB();
 
 app.listen(3000);
