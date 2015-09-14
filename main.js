@@ -1,42 +1,58 @@
 var fs = require('fs');
 var express = require('express');
+var exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var reg = require('./assets/js/register.js');
-var merch = require('./assets/js/coffeeShop.js')
-
-var database;
+var merch = require('./assets/js/coffeeShop.js');
 
 app = express();
 
-app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
+
+/*app.get('/hbtest', function(req, res) {
+  res.render('hbtest', {
+    title: "test"
+  });
+
+  console.log('test');
+});*/
+
+var database;
+
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({ extended: true })); 
 
 app.get('/', function (req, res) {
-  var output =  "<html>"+
-                  "<head>" +
-                    "<title>Login</title>" +
-                  "</head>" +
-                  "<body>" +
-                    "<form action='/login' method='post'>" +
-                      "<p>" +
-                        "Who are you?<br>"+
-                        "<input type='text' name='userID' value='usr'>" +
-                        "<input type='submit' value='submit'>" +
-                      "</p>" +
-                    "</form>" +
-                  "</body>" +
-                "</html>";
-  res.send(output);
+  res.render('index', {
+    title: "Login"
+  });
 });
 
 app.get('/register/:user', function (req, res) {
   var userID = req.params.user;
   var operator = database[userID];
 
-  if (!database[userID]) {
+  if (!operator) {
     res.redirect('/');
   }
 
+  console.log(merch.items.coffee);
+
+  res.render('register', {
+    title: "Cash Register",
+    operator: database[req.params.user],
+    menu: merch.items
+  });
+  /*res.render('register', (function () {
+    return {
+      title: "Cash Register",
+      operator: operator,
+    };
+  })());*/
+
+
+  /*
   var output = "<html><head><title>Cash Register</title></head><body>";
   output += "<h2>Operator: " + operator.user + "</h2>";
   output += "<fieldset>" + formatTotals(userID) + "</fieldset>";
@@ -48,7 +64,7 @@ app.get('/register/:user', function (req, res) {
   output += "</form></p><p><a href='https://github.com/drakemain/cash_register/tree/node-app'>" + 
     "Source</a></body></html>";
 
-  res.send(output);
+  res.send(output);*/
 });
 
 app.get('/showUserData/:user', function(req, res) {
@@ -117,9 +133,9 @@ app.post('/reset/:user', function(req, res) {
   res.redirect('/register/' + req.params.user);
 });
 
-var formatMenu = function(userID) {
+var generateMenu = function(userID) {
   var i = 1;
-  var output = "<form action='/form-handler/" + userID + "' method='post'>";
+  var output;
 
   for(var item in merch.items) {
     if (merch.items[item].sizes) {

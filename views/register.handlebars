@@ -1,0 +1,31 @@
+<h2>Operator: {{operator.user}}</h2>
+
+<fieldset>
+  Subtotal: {{operator.subTotal}} <br>
+  Tax: {{operator.tax}} <br>
+  Total: {{operator.total}} <br>
+</fieldset>
+<p>
+  <form action='form-handler/{{operator.user}}' method='post'>
+    
+    {{#each menu}}
+      {{#if sizes}}
+        <br>{{name}}:<br>
+
+        {{#each sizes}}
+          <input type='radio' name='item' value='{"item": {{name}}, "size": {{@key}} }'>
+          {{@key}}: ${{this}}<br>
+        {{/each}}
+      
+      {{else}}
+        <br><input type='radio' name='item' value='{"item": {{name}}, "size": "na"}'>
+        {{name}}: {{amt}}<br>
+      {{/if}}
+    {{/each}}
+
+		<input type='submit' value='Submit'>
+		<input type='submit' value='Reset' formaction='/reset/" + userID +"'>
+		<a href='/'>Logout</a>
+	</form>
+</p>
+<p><a href='https://github.com/drakemain/cash_register/tree/node-app'>Source</a></p>
