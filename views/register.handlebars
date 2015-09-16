@@ -6,19 +6,18 @@
   Total: {{operator.total}} <br>
 </fieldset>
 <p>
-  <form action='form-handler/{{operator.user}}' method='post'>
+  <form action='/form-handler/{{operator.user}}' method='post'>
     
     {{#each menu}}
       {{#if sizes}}
         <br>{{name}}:<br>
-
         {{#each sizes}}
-          <input type='radio' name='item' value='{"item": {{name}}, "size": {{@key}} }'>
+          <input type='radio' name='item' value='{"item": "{{@../key}}", "size": "{{@key}}" }'>
           {{@key}}: ${{this}}<br>
         {{/each}}
       
       {{else}}
-        <br><input type='radio' name='item' value='{"item": {{name}}, "size": "na"}'>
+        <br><input type='radio' name='item' value='{"item": "{{@key}}", "size": "na"}'>
         {{name}}: {{amt}}<br>
       {{/if}}
     {{/each}}

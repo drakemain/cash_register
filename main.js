@@ -110,7 +110,7 @@ app.post('/form-handler/:user', function(req, res) {
     selection.size = '';
   }
 
-  console.log(selection)
+  console.log("Selection.item: " + selection.item);
 
   var scannedItem = reg.register.scanItem(merch.items[selection.item], selection.size, 1);
 
