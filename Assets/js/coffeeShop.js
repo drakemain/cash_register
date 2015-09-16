@@ -71,5 +71,6 @@ module.exports.index = {
 	2: "latte",
 	3: "cappuccino",
 	4: "bagel",
-	5: "muffin"
+	5: "muffin",
+	6: "nonTaxItem"
 };
