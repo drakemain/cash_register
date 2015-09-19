@@ -104,9 +104,11 @@ app.post('/form-handler/:user', function(req, res) {
 });
 
 app.post('/reset/:user', function(req, res) {
-  database[req.params.user].subTotal = 0;
-  database[req.params.user].tax = 0;
-  database[req.params.user].total = 0;
+  var user = req.params.user;
+
+  database[user].subTotal = "0";
+  database[user].tax = "0";
+  database[user].total = "0";
 
   res.redirect('/register/' + req.params.user);
 });
