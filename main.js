@@ -2,6 +2,7 @@ var fs = require('fs');
 var express = require('express');
 var exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
+var bigDec = require('bigdecimal');
 var reg = require('./assets/js/register.js');
 var merch = require('./assets/js/coffeeShop.js');
 
@@ -54,9 +55,9 @@ app.post('/login', function(req, res) {
   if (!database[userID]) {
     database[userID] = {
       "user": userID,
-      "subTotal": 0,
-      "tax": 0,
-      "total": 0
+      "subTotal": "0",
+      "tax": "0",
+      "total": "0"
     };
 
     writeDB();
@@ -79,13 +80,23 @@ app.post('/form-handler/:user', function(req, res) {
 
   console.log("Selection.item: " + selection.item);
 
-  var scannedItem = reg.register.scanItem(merch.items[selection.item], selection.size, 1);
+  var scannedItem = reg.register.scanItem(merch.items[selection.item], selection.size, "1");
 
-  console.log(scannedItem);
+  var currentSubTotal = new bigDec.BigDecimal(database[req.params.user].subTotal);
+  var currentTax = new bigDec.BigDecimal(database[req.params.user].tax);
+  var currentTotal = new bigDec.BigDecimal(database[req.params.user].total);
 
-  database[req.params.user].subTotal += scannedItem.subTotal;
-  database[req.params.user].tax += scannedItem.tax;
-  database[req.params.user].total += scannedItem.total;
+  var newSubTotal = currentSubTotal.add(scannedItem.subTotal);
+  var newTax = currentTax.add(scannedItem.tax);
+  var newTotal = currentTotal.add(scannedItem.total);
+
+  newSubTotal = newSubTotal.setScale(2, bigDec.BigDecimal.ROUND_FLOOR);
+  newTax = newTax.setScale(2, bigDec.BigDecimal.ROUND_FLOOR);
+  newTotal = newTotal.setScale(2, bigDec.BigDecimal.ROUND_FLOOR);
+
+  database[req.params.user].subTotal = newSubTotal.toString();
+  database[req.params.user].tax = newTax.toString();
+  database[req.params.user].total = newTotal.toString();
 
   writeDB();
 

@@ -3,9 +3,9 @@ module.exports.items = {
 		name: "Coffee",
 
 		sizes: {
-			small: 1.50,
-			med: 2.00,
-			large: 2.25,
+			small: "1.50",
+			med: "2.00",
+			large: "2.25",
 		},
 
 		taxable: true
@@ -15,9 +15,9 @@ module.exports.items = {
 		name: "Latte",
 
 		sizes: {
-			small: 2.25,
-			med: 2.75,
-			large: 3.10,
+			small: "2.25",
+			med: "2.75",
+			large: "3.10",
 		},
 
 		taxable: true
@@ -27,9 +27,9 @@ module.exports.items = {
 		name: "Cappuccino",
 
 		sizes: {
-			small: 2.50,
-			med: 2.85,
-			large: 3.25,
+			small: "2.50",
+			med: "2.85",
+			large: "3.25",
 		},
 
 		taxable: true
@@ -38,7 +38,7 @@ module.exports.items = {
 	bagel: {
 		name: "Bagel",
 
-		amt: 3.25,
+		amt: "3.25",
 
 		taxable: true,
 	},
@@ -46,7 +46,7 @@ module.exports.items = {
 	muffin: {
 		name: "Muffin", 
 
-		amt: 3.00,
+		amt: "3.00",
 
 		taxable: true
 	},
@@ -55,11 +55,11 @@ module.exports.items = {
 		name: "A non-taxable item",
 
 		sizes: {
-			xsmall: .25,
-			small: .50,
-			med: 1.00,
-			large: 1.40,
-			xlarge: 2.00
+			xsmall: ".25",
+			small: ".50",
+			med: "1.00",
+			large: "1.40",
+			xlarge: "2.00"
 		},
 
 		taxable: false
