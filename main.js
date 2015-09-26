@@ -3,6 +3,7 @@ var express = require('express');
 var exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var bigDec = require('bigdecimal');
+var sqlite = require('sqlite3').verbose();
 var reg = require('./assets/js/register.js');
 var merch = require('./assets/js/coffeeShop.js');
 
@@ -27,16 +28,21 @@ app.get('/register/:user', function (req, res) {
 
   if (!database[userID]) {
     res.redirect('/');
+  } else {
+  
+    res.render('register', {
+      title: "Cash Register",
+      operator: database[req.params.user],
+      menu: merch.items
+    });
   }
-
-  res.render('register', {
-    title: "Cash Register",
-    operator: database[req.params.user],
-    menu: merch.items
-  });
 });
 
-app.get('/showUserData/:user', function(req, res) {
+app.get('/users', function(req, res) {
+  res.send(database);
+});
+
+app.get('/users/:user', function(req, res) {
   if (database[req.params.user]){
     res.send(database[req.params.user]);
   } else {
@@ -44,13 +50,8 @@ app.get('/showUserData/:user', function(req, res) {
   }
 });
 
-app.get('/showDB', function(req, res) {
-  res.send(database);
-});
-
-app.post('/login', function(req, res) {
+app.post('/users', function(req, res) {
   var userID = req.body.userID;
-  //var redirect = "/showUserData/" + userID;
 
   if (!database[userID]) {
     database[userID] = {
@@ -71,36 +72,41 @@ app.post('/login', function(req, res) {
 });
 
 app.post('/form-handler/:user', function(req, res) {
+  if (req.body.item === undefined) {
+    console.log(database[req.params.user].user + " submitted empty form.")
+
+    res.redirect('/register/' + req.params.user);
+  } else {
+    var selection = JSON.parse(req.body.item);
   
-  var selection = JSON.parse(req.body.item);
-
-  if (selection.size === "na") {
-    selection.size = '';
+    if (selection.size === "na") {
+      selection.size = '';
+    }
+  
+    console.log(req.params.user + " Selection.item: " + selection.item);
+  
+    var scannedItem = reg.register.scanItem(merch.items[selection.item], selection.size, "1");
+  
+    var currentSubTotal = new bigDec.BigDecimal(database[req.params.user].subTotal);
+    var currentTax = new bigDec.BigDecimal(database[req.params.user].tax);
+    var currentTotal = new bigDec.BigDecimal(database[req.params.user].total);
+  
+    var newSubTotal = currentSubTotal.add(scannedItem.subTotal);
+    var newTax = currentTax.add(scannedItem.tax);
+    var newTotal = currentTotal.add(scannedItem.total);
+  
+    newSubTotal = newSubTotal.setScale(2, bigDec.BigDecimal.ROUND_FLOOR);
+    newTax = newTax.setScale(2, bigDec.BigDecimal.ROUND_FLOOR);
+    newTotal = newTotal.setScale(2, bigDec.BigDecimal.ROUND_FLOOR);
+  
+    database[req.params.user].subTotal = newSubTotal.toString();
+    database[req.params.user].tax = newTax.toString();
+    database[req.params.user].total = newTotal.toString();
+  
+    writeDB();
+  
+    res.redirect('/register/' + req.params.user);
   }
-
-  console.log("Selection.item: " + selection.item);
-
-  var scannedItem = reg.register.scanItem(merch.items[selection.item], selection.size, "1");
-
-  var currentSubTotal = new bigDec.BigDecimal(database[req.params.user].subTotal);
-  var currentTax = new bigDec.BigDecimal(database[req.params.user].tax);
-  var currentTotal = new bigDec.BigDecimal(database[req.params.user].total);
-
-  var newSubTotal = currentSubTotal.add(scannedItem.subTotal);
-  var newTax = currentTax.add(scannedItem.tax);
-  var newTotal = currentTotal.add(scannedItem.total);
-
-  newSubTotal = newSubTotal.setScale(2, bigDec.BigDecimal.ROUND_FLOOR);
-  newTax = newTax.setScale(2, bigDec.BigDecimal.ROUND_FLOOR);
-  newTotal = newTotal.setScale(2, bigDec.BigDecimal.ROUND_FLOOR);
-
-  database[req.params.user].subTotal = newSubTotal.toString();
-  database[req.params.user].tax = newTax.toString();
-  database[req.params.user].total = newTotal.toString();
-
-  writeDB();
-
-  res.redirect('/register/' + req.params.user);
 });
 
 app.post('/reset/:user', function(req, res) {
@@ -110,11 +116,13 @@ app.post('/reset/:user', function(req, res) {
   database[user].tax = "0";
   database[user].total = "0";
 
+  writeDB();
+
   res.redirect('/register/' + req.params.user);
 });
 
 var fetchDB = function() {
-  console.log("Initializing database.");
+  console.log("Initializing database..");
 
   fs.exists('data/userDB.json', function(exists) {
     if (exists) {
