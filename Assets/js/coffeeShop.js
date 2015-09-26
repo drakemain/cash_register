@@ -51,6 +51,20 @@ module.exports.items = {
 		taxable: true
 	},
 
+	taxItem: {
+		name: "A taxble item",
+
+		sizes: {
+			sizeA: ".25",
+			sizeB: ".50",
+			sizeC: "1.00",
+			sizeD: "2.00",
+			sizeName: "5.00"
+		},
+
+		taxable: true
+	},
+
 	nonTaxItem: {
 		name: "A non-taxable item",
 
@@ -58,19 +72,10 @@ module.exports.items = {
 			xsmall: ".25",
 			small: ".50",
 			med: "1.00",
-			large: "1.40",
-			xlarge: "2.00"
+			large: "2.00",
+			xlarge: "5.00"
 		},
 
 		taxable: false
 	}
-};
-
-module.exports.index = {
-	1: "coffee",
-	2: "latte",
-	3: "cappuccino",
-	4: "bagel",
-	5: "muffin",
-	6: "nonTaxItem"
 };
