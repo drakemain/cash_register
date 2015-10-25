@@ -1,13 +1,17 @@
 <h2>Operator: {{operator.user}}</h2>
 
+<!-- displays running totals -->
 <fieldset>
   Subtotal: {{operator.subTotal}} <br>
   Tax: {{operator.tax}} <br>
   Total: {{operator.total}} <br>
 </fieldset>
+
 <p>
   <form action='/form-handler/{{operator.user}}' method='post'>
     
+    <!-- loops through items in Assets/js/coffeeShop.js and displays each item
+    and its price. If the item is priced by size, it is displayed appropriately. -->
     {{#each menu}}
       {{#if sizes}}
         <br>{{name}}:<br>
