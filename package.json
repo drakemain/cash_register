@@ -5,8 +5,8 @@
   "dependencies": {
     "bigdecimal": "^0.6.1",
     "express": "^4.13.3",
+    "body-parser": "^1.13.3",
     "express-handlebars": "^2.0.1",
-    "readline-sync": "^1.2.19",
     "sqlite3": "^3.1.0"
   },
   "scripts": {
